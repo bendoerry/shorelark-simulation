@@ -9,7 +9,17 @@ pub struct World {
 }
 
 #[derive(Debug)]
-pub struct Animal;
+pub struct Animal {
+    position: Point2,
+}
 
 #[derive(Debug)]
-pub struct Food;
+pub struct Food {
+    position: Point2,
+}
+
+#[derive(Debug)]
+pub struct Point2 {
+    x: f32,
+    y: f32,
+}
