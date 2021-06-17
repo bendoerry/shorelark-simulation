@@ -1,4 +1,5 @@
-use crate::world::World;
+pub use crate::animal::Animal;
+pub use crate::world::World;
 
 mod animal;
 mod food;
