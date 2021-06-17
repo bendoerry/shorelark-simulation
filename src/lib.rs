@@ -7,3 +7,11 @@ mod world;
 pub struct Simulation {
     world: World,
 }
+
+impl Simulation {
+    pub fn random(rng: &mut dyn rand::RngCore) -> Self {
+        Self {
+            world: World::random(rng),
+        }
+    }
+}
