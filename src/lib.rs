@@ -1,1 +1,6 @@
-pub struct Simulation;
+pub struct Simulation {
+    world: World,
+}
+
+#[derive(Debug)]
+pub struct World;
