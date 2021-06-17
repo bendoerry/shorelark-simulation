@@ -1,3 +1,9 @@
+use nalgebra as na;
+// --------- ^^
+// | This kind of import - one that uses `as` - is called an alias.
+// | You'd say that we're aliasing `nalgebra` as `na`.
+// ---
+
 pub struct Simulation {
     world: World,
 }
@@ -10,16 +16,10 @@ pub struct World {
 
 #[derive(Debug)]
 pub struct Animal {
-    position: Point2,
+    position: na::Point2<f32>,
 }
 
 #[derive(Debug)]
 pub struct Food {
-    position: Point2,
-}
-
-#[derive(Debug)]
-pub struct Point2 {
-    x: f32,
-    y: f32,
+    position: na::Point2<f32>,
 }
