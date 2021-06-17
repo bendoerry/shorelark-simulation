@@ -24,4 +24,12 @@ impl World {
 
         Self { animals, foods }
     }
+
+    pub fn animals(&self) -> &[Animal] {
+        &self.animals
+    }
+
+    pub fn foods(&self) -> &[Food] {
+        &self.foods
+    }
 }

@@ -12,4 +12,8 @@ impl Food {
             position: rng.gen(),
         }
     }
+
+    pub fn position(&self) -> na::Point2<f32> {
+        self.position
+    }
 }

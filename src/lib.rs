@@ -14,4 +14,8 @@ impl Simulation {
             world: World::random(rng),
         }
     }
+
+    pub fn world(&self) -> &World {
+        &self.world
+    }
 }
