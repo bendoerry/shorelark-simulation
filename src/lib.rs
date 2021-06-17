@@ -3,4 +3,13 @@ pub struct Simulation {
 }
 
 #[derive(Debug)]
-pub struct World;
+pub struct World {
+    animals: Vec<Animal>,
+    foods: Vec<Food>,
+}
+
+#[derive(Debug)]
+pub struct Animal;
+
+#[derive(Debug)]
+pub struct Food;
