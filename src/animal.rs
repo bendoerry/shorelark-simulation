@@ -1,6 +1,8 @@
 use nalgebra as na;
 use rand::Rng;
 
+mod eye;
+
 #[derive(Debug)]
 pub struct Animal {
     crate position: na::Point2<f32>,
