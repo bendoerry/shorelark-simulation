@@ -343,4 +343,71 @@ mod tests {
             .run()
         }
     }
+
+    mod different_rotations {
+        use super::{food, TestCase};
+        use std::f32::consts::PI;
+        use test_case::test_case;
+
+        /// World:
+        ///
+        /// ------------
+        /// |          |
+        /// |          |
+        /// |    @>    |
+        /// |          |
+        /// |         %|
+        /// ------------
+        ///
+        /// Test cases:
+        ///
+        /// ------------
+        /// |..........|
+        /// |..........|
+        /// |....@>....|
+        /// |..........|
+        /// |.........%|
+        /// ------------
+        ///
+        /// ------------
+        /// |..........|
+        /// |..........|
+        /// |....@.....|
+        /// |....v.....|
+        /// |.........%|
+        /// ------------
+        ///
+        /// ------------
+        /// |..........|
+        /// |..........|
+        /// |...<@.....|
+        /// |..........|
+        /// |.........%|
+        /// ------------
+        ///
+        /// ... and so on, until we do a full circle, 360° rotation:
+        #[test_case(0.00 * PI, "         +   ")] // Food is to our right
+        #[test_case(0.25 * PI, "        +    ")]
+        #[test_case(0.50 * PI, "      +      ")]
+        #[test_case(0.75 * PI, "    +        ")]
+        #[test_case(1.00 * PI, "   +         ")] // Food is behind us
+        #[test_case(1.25 * PI, " +           ")] // (we continue to see it
+        #[test_case(1.50 * PI, "            +")] // due to 360° fov_angle.)
+        #[test_case(1.75 * PI, "           + ")]
+        #[test_case(2.00 * PI, "         +   ")] // Here we've done 360°
+        #[test_case(2.25 * PI, "        +    ")] // (and a bit more, to
+        #[test_case(2.50 * PI, "      +      ")] // prove the numbers wrap.)
+        fn with_rotation(rot: f32, expected_vision: &'static str) {
+            TestCase {
+                foods: vec![food(0.5, 1.0)],
+                fov_range: 1.0,
+                fov_angle: 2.0 * PI,
+                x: 0.5,
+                y: 0.5,
+                rot,
+                expected_vision,
+            }
+            .run()
+        }
+    }
 }
