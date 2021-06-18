@@ -177,15 +177,43 @@ impl Default for Eye {
 
 #[cfg(test)]
 mod tests {
+    use crate::food::Food;
+
+    struct TestCase {
+        foods: Vec<Food>,
+        fov_range: f32,
+        fov_angle: f32,
+        x: f32,
+        y: f32,
+        rot: f32,
+        expected_vision: &'static str,
+    }
+
+    impl TestCase {
+        fn run(self) {
+            todo!();
+        }
+    }
 
     mod different_fov_ranges {
         use test_case::test_case;
+
+        use super::TestCase;
 
         #[test_case(1.0)]
         #[test_case(0.5)]
         #[test_case(0.1)]
         fn test(fov_range: f32) {
-            todo!()
+            TestCase {
+                foods: todo!(),
+                fov_angle: todo!(),
+                x: todo!(),
+                y: todo!(),
+                rot: todo!(),
+                expected_vision: todo!(),
+                fov_range,
+            }
+            .run()
         }
     }
 }
