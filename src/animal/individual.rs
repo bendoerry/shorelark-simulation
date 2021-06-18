@@ -10,7 +10,7 @@ pub struct AnimalIndividual {
 impl AnimalIndividual {
     pub fn from_animal(animal: &Animal) -> Self {
         Self {
-            fitness: todo!(),
+            fitness: animal.satiation as f32,
             chromosome: todo!(),
         }
     }
