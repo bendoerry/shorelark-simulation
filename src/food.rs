@@ -3,7 +3,7 @@ use rand::Rng;
 
 #[derive(Debug)]
 pub struct Food {
-    position: na::Point2<f32>,
+    crate position: na::Point2<f32>,
 }
 
 impl Food {
