@@ -129,7 +129,15 @@ impl Eye {
         rotation: na::Rotation2<f32>,
         foods: &[Food],
     ) -> Vec<f32> {
-        todo!();
+        let mut cells = vec![0.0; self.cells];
+
+        for food in foods {
+            if food inside fov {
+                cells[cell that sees this food] += how close the food is;
+            }
+        }
+
+        cells
     }
 }
 
