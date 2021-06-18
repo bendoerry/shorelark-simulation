@@ -3,8 +3,8 @@ use crate::food::Food;
 
 #[derive(Debug)]
 pub struct World {
-    animals: Vec<Animal>,
-    foods: Vec<Food>,
+    crate animals: Vec<Animal>,
+    crate foods: Vec<Food>,
 }
 
 impl World {

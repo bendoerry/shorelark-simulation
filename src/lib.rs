@@ -1,3 +1,5 @@
+#![feature(crate_visibility_modifier)]
+
 pub use crate::animal::Animal;
 pub use crate::world::World;
 

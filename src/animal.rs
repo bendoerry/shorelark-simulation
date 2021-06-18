@@ -3,9 +3,9 @@ use rand::Rng;
 
 #[derive(Debug)]
 pub struct Animal {
-    position: na::Point2<f32>,
-    rotation: na::Rotation2<f32>,
-    speed: f32,
+    crate position: na::Point2<f32>,
+    crate rotation: na::Rotation2<f32>,
+    crate speed: f32,
 }
 
 impl Animal {
