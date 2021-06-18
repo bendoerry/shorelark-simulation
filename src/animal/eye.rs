@@ -139,21 +139,56 @@ impl Eye {
                 continue;
             }
 
-            // Returns vector's direction relative to the X axis
             let angle = na::Rotation2::rotation_between(&na::Vector2::x(), &vec).angle();
-
-            // Because our bird is *also* rotated, we have to include its
-            // rotation too:
             let angle = angle - rotation.angle();
-
-            // Rotation is wrapping (from -PI to PI)
             let angle = na::wrap(angle, -PI, PI);
 
-            // If current angle is outside our birdie's field of view, jump
-            // to the next food
             if angle < -self.fov_angle / 2.0 || angle > self.fov_angle / 2.0 {
                 continue;
             }
+
+            // Makes angle *relative* to our birdie's field of view - that is:
+            // transforms it from <-FOV_ANGLE/2,+FOV_ANGLE/2> to <0,FOV_ANGLE>.
+            //
+            // After this operation:
+            // - an angle of 0° means "the beginning of the FOV",
+            // - an angle of self.fov_angle means "the ending of the FOV".
+            let angle = angle + self.fov_angle / 2.0;
+
+            // Since this angle is now in range <0,FOV_ANGLE>, by dividing it by
+            // FOV_ANGLE, we transform it to range <0,1>.
+            //
+            // The value we get can be treated as a percentage, that is:
+            //
+            // - 0.2 = the food is seen by the "20%-th" eye cell
+            //         (practically: it's a bit to the left)
+            //
+            // - 0.5 = the food is seen by the "50%-th" eye cell
+            //         (practically: it's in front of our birdie)
+            //
+            // - 0.8 = the food is seen by the "80%-th" eye cell
+            //         (practically: it's a bit to the right)
+            let cell = angle / self.fov_angle;
+
+            // With cell in range <0,1>, by multiplying it by the number of
+            // cells we get range <0,CELLS> - this corresponds to the actual
+            // cell index inside our `cells` array.
+            //
+            // Say, we've got 8 eye cells:
+            // - 0.2 * 8 = 20% * 8 = 1.6 ~= 1 = second cell (indexing from 0!)
+            // - 0.5 * 8 = 50% * 8 = 4.0 ~= 4 = fifth cell
+            // - 0.8 * 8 = 80% * 8 = 6.4 ~= 6 = seventh cell
+            let cell = cell * (self.cells as f32);
+
+            // Our `cell` is of type `f32` - before we're able to use it to
+            // index an array, we have to convert it to `usize`.
+            //
+            // We're also doing `.min()` to cover an extreme edge case: for
+            // cell=1.0 (which corresponds to a food being maximally to the
+            // right side of our birdie), we'd get `cell` of `cells.len()`,
+            // which is one element *beyond* what the `cells` array contains
+            // (its range is <0, cells.len()-1>).
+            let cell = (cell as usize).min(cells.len() - 1);
         }
 
         cells
