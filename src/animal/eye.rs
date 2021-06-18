@@ -178,6 +178,26 @@ impl Default for Eye {
 #[cfg(test)]
 mod tests {
     use crate::food::Food;
+    use nalgebra as na;
+
+    use super::Eye;
+
+    /// All our tests will use eyes hard-coded to thirteen eye cells.
+    ///
+    /// As for the "why":
+    ///
+    /// While we certainly *could* implement tests for different number of
+    /// eye cells, after a while I've decided it's just not worth the
+    /// hassle - as you'll see in a moment, we'll already get a good coverage
+    /// via the other parameters, so creating a separate set of tests for
+    /// different values of eye cells seemed like a waste of time.
+    ///
+    /// As for the "why this number in particular":
+    ///
+    /// I've checked a few numbers by hand, and generally found 13 to yield
+    /// pretty good results. As always, nothing special about 13 in
+    /// particular, your (eye) mileage may vary.
+    const TEST_EYE_CELLS: usize = 13;
 
     struct TestCase {
         foods: Vec<Food>,
@@ -191,7 +211,13 @@ mod tests {
 
     impl TestCase {
         fn run(self) {
-            todo!();
+            let eye = Eye::new(self.fov_range, self.fov_angle, TEST_EYE_CELLS);
+
+            let actual_vision = eye.process_vision(
+                na::Point2::new(self.x, self.y),
+                na::Rotation2::new(self.rot),
+                &self.foods,
+            );
         }
     }
 
