@@ -132,44 +132,40 @@ impl Eye {
         let mut cells = vec![0.0; self.cells];
 
         for food in foods {
-            let vec = food.position - position;
+            let vec = self.food_vec(position, food);
             let dist = vec.norm();
+            let angle = self.food_angle(rotation, vec);
 
-            if dist >= self.fov_range {
+            if !self.visible_food(dist, angle) {
                 continue;
             }
 
-            let angle = na::Rotation2::rotation_between(&na::Vector2::x(), &vec).angle();
-            let angle = angle - rotation.angle();
-            let angle = na::wrap(angle, -PI, PI);
-
-            if angle < -self.fov_angle / 2.0 || angle > self.fov_angle / 2.0 {
-                continue;
-            }
-
-            let angle = angle + self.fov_angle / 2.0;
-            let cell = angle / self.fov_angle;
-            let cell = cell * (self.cells as f32);
+            let cell = angle / self.fov_angle * (self.cells as f32);
             let cell = (cell as usize).min(cells.len() - 1);
 
-            // Energy is inversely proportional to the distance between our
-            // birdie and the currently checked food; that is - an energy of:
-            //
-            // - 0.0001 = food is barely in the field of view (i.e. far away),
-            // - 1.0000 = food is right in front of the bird.
-            //
-            // We could also model energy in reverse manner - "the higher the
-            // energy, the further away the food" - but from what I've seen, it
-            // makes the learning process a bit harder.
-            //
-            // As always, feel free to experiment! -- overall this isn't the
-            // only way of implementing eyes :-)
             let energy = (self.fov_range - dist) / self.fov_range;
 
             cells[cell] += energy;
         }
 
         cells
+    }
+
+    fn food_vec(&self, position: na::Point2<f32>, food: &Food) -> na::Vector2<f32> {
+        food.position - position
+    }
+
+    fn food_angle(&self, rotation: na::Rotation2<f32>, vec: na::Vector2<f32>) -> f32 {
+        let angle = na::Rotation2::rotation_between(&na::Vector2::x(), &vec).angle();
+        let angle = angle - rotation.angle();
+        let angle = na::wrap(angle, -PI, PI);
+        let angle = angle + self.fov_angle / 2.0;
+
+        angle
+    }
+
+    fn visible_food(&self, dist: f32, angle: f32) -> bool {
+        dist < self.fov_range && angle >= 0.0 && angle <= self.fov_angle
     }
 }
 
