@@ -98,6 +98,12 @@ impl Simulation {
         self.process_collisions(rng);
         self.process_brains();
         self.process_movements();
+
+        self.age += 1;
+
+        if self.age > GENERATION_LENGTH {
+            self.evolve(rng);
+        }
     }
 
     fn process_collisions(&mut self, rng: &mut dyn rand::RngCore) {
@@ -157,6 +163,27 @@ impl Simulation {
 
             animal.position.x = na::wrap(animal.position.x, 0.0, 1.0);
             animal.position.y = na::wrap(animal.position.y, 0.0, 1.0);
+        }
+    }
+
+    fn evolve(&mut self, rng: &mut dyn rand::RngCore) {
+        self.age = 0;
+
+        // Step 1: Prepare birdies to be sent into the genetic algorithm
+        let current_population = todo!();
+
+        // Step 2: Evolve birdies
+        let evolved_population = self.ga.evolve(rng, &current_population);
+
+        // Step 3: Bring birdies back from the genetic algorithm
+        self.world.animals = todo!();
+
+        // Step 4: Restart foods
+        //
+        // (this is not strictly necessary, but it allows to easily spot
+        // when the evolution happens - so it's more of a UI thing.)
+        for food in &mut self.world.foods {
+            food.position = rng.gen();
         }
     }
 }
