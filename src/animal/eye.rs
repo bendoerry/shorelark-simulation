@@ -273,20 +273,70 @@ mod tests {
     }
 
     mod different_fov_ranges {
+        use super::{food, TestCase};
+        use std::f32::consts::FRAC_PI_2;
         use test_case::test_case;
 
-        use super::TestCase;
-
-        #[test_case(1.0, "not sure yet")]
-        #[test_case(0.5, "not sure yet")]
-        #[test_case(0.1, "not sure yet")]
-        fn test(fov_range: f32, expected_vision: &'static str) {
+        /// During tests in this module, we're using a world that looks
+        /// like this:
+        ///
+        /// ------------
+        /// |          |
+        /// |          |
+        /// |    @>   %|
+        /// |          |
+        /// |          |
+        /// ------------
+        ///
+        /// Each test gradually reduces our birdie's field of view and
+        /// compares what the birdie sees:
+        ///
+        /// ------------
+        /// |        /.|
+        /// |      /...|
+        /// |    @>...%|
+        /// |      \...|
+        /// |        \.|
+        /// ------------
+        ///
+        /// ------------
+        /// |          |
+        /// |      /.| |
+        /// |    @>..|%|
+        /// |      \.| |
+        /// |          |
+        /// ------------
+        ///
+        /// ------------
+        /// |          |
+        /// |          |
+        /// |    @>.| %|
+        /// |          |
+        /// |          |
+        /// ------------
+        ///
+        /// Over time, what we see is the food gradually disappearing
+        /// into an emptiness:
+        ///
+        /// (well, technically the food and bird remain stationary - it's
+        /// only the birdie's own field of view that gets reduced.)
+        #[test_case(1.0, "      +      ")] // Food is inside the FOV
+        #[test_case(0.9, "      +      ")] // ditto
+        #[test_case(0.8, "      +      ")] // ditto
+        #[test_case(0.7, "      .      ")] // Food slowly disappears
+        #[test_case(0.6, "      .      ")] // ditto
+        #[test_case(0.5, "             ")] // Food disappeared!
+        #[test_case(0.4, "             ")]
+        #[test_case(0.3, "             ")]
+        #[test_case(0.2, "             ")]
+        #[test_case(0.1, "             ")]
+        fn with_range(fov_range: f32, expected_vision: &'static str) {
             TestCase {
-                foods: todo!(),
-                fov_angle: todo!(),
-                x: todo!(),
-                y: todo!(),
-                rot: todo!(),
+                foods: vec![food(1.0, 0.5)],
+                fov_angle: FRAC_PI_2,
+                x: 0.5,
+                y: 0.5,
+                rot: 0.0,
                 fov_range,
                 expected_vision,
             }
