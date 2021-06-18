@@ -3,6 +3,7 @@
 use nalgebra as na;
 
 pub use crate::animal::Animal;
+pub use crate::food::Food;
 pub use crate::world::World;
 
 mod animal;
