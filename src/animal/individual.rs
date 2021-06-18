@@ -1,17 +1,23 @@
 use lib_genetic_algorithm as ga;
 
-pub struct AnimalIndividual;
+pub struct AnimalIndividual {
+    fitness: f32,
+    chromosome: ga::Chromosome,
+}
 
 impl ga::Individual for AnimalIndividual {
     fn create(chromosome: ga::Chromosome) -> Self {
-        todo!();
+        Self {
+            fitness: 0.0,
+            chromosome,
+        }
     }
 
     fn chromosome(&self) -> &ga::Chromosome {
-        todo!()
+        &self.chromosome
     }
 
     fn fitness(&self) -> f32 {
-        todo!();
+        self.fitness
     }
 }
