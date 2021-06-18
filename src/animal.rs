@@ -4,6 +4,8 @@ use rand::Rng;
 
 use self::eye::Eye;
 
+pub use self::individual::AnimalIndividual;
+
 mod eye;
 mod individual;
 

@@ -5,6 +5,8 @@ use nalgebra as na;
 use rand::Rng;
 use std::f32::consts::FRAC_PI_2;
 
+use crate::animal::AnimalIndividual;
+
 pub use crate::animal::Animal;
 pub use crate::food::Food;
 pub use crate::world::World;
@@ -174,7 +176,7 @@ impl Simulation {
             .world
             .animals
             .iter()
-            .map(|animal| todo!("Convert `Animal` to `AnimalIndividual`"))
+            .map(AnimalIndividual::from_animal)
             .collect();
 
         // Evolves this `Vec<AnimalIndividual>`
@@ -183,7 +185,7 @@ impl Simulation {
         // Transforms `Vec<AnimalIndividual>` back into `Vec<Animal>`
         self.world.animals = evolved_population
             .into_iter()
-            .map(|individual| todo!("Convert `AnimalIndividual` to `Animal`"))
+            .map(|individual| individual.into_animal(rng))
             .collect();
 
         for food in &mut self.world.foods {
