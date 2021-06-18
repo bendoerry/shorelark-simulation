@@ -410,4 +410,100 @@ mod tests {
             .run()
         }
     }
+
+    mod different_positions {
+        use super::{food, TestCase};
+        use std::f32::consts::FRAC_PI_2;
+        use test_case::test_case;
+
+        /// World:
+        ///
+        /// ------------
+        /// |          |
+        /// |         %|
+        /// |          |
+        /// |         %|
+        /// |          |
+        /// ------------
+        ///
+        /// Test cases for the X axis:
+        ///
+        /// ------------
+        /// |          |
+        /// |        /%|
+        /// |       @>.|
+        /// |        \%|
+        /// |          |
+        /// ------------
+        ///
+        /// ------------
+        /// |        /.|
+        /// |      /..%|
+        /// |     @>...|
+        /// |      \..%|
+        /// |        \.|
+        /// ------------
+        ///
+        /// ... and so on, going further left
+        ///     (or, from the bird's point of view - going _back_)
+        ///
+        /// Test cases for the Y axis:
+        ///
+        /// ------------
+        /// |     @>...|
+        /// |       \.%|
+        /// |         \|
+        /// |         %|
+        /// |          |
+        /// ------------
+        ///
+        /// ------------
+        /// |      /...|
+        /// |     @>..%|
+        /// |      \...|
+        /// |        \%|
+        /// |          |
+        /// ------------
+        ///
+        /// ... and so on, going further down
+        ///     (or, from the bird's point of view - going _right_)
+
+        // Checking the X axis:
+        // (you can see the bird is "flying away" from the foods)
+        #[test_case(0.9, 0.5, "#           #")]
+        #[test_case(0.8, 0.5, "  #       #  ")]
+        #[test_case(0.7, 0.5, "   +     +   ")]
+        #[test_case(0.6, 0.5, "    +   +    ")]
+        #[test_case(0.5, 0.5, "    +   +    ")]
+        #[test_case(0.4, 0.5, "     + +     ")]
+        #[test_case(0.3, 0.5, "     . .     ")]
+        #[test_case(0.2, 0.5, "     . .     ")]
+        #[test_case(0.1, 0.5, "     . .     ")]
+        #[test_case(0.0, 0.5, "             ")]
+        //
+        // Checking the Y axis:
+        // (you can see the bird is "flying alongside" the foods)
+        #[test_case(0.5, 0.0, "            +")]
+        #[test_case(0.5, 0.1, "          + .")]
+        #[test_case(0.5, 0.2, "         +  +")]
+        #[test_case(0.5, 0.3, "        + +  ")]
+        #[test_case(0.5, 0.4, "      +  +   ")]
+        #[test_case(0.5, 0.6, "   +  +      ")]
+        #[test_case(0.5, 0.7, "  + +        ")]
+        #[test_case(0.5, 0.8, "+  +         ")]
+        #[test_case(0.5, 0.9, ". +          ")]
+        #[test_case(0.5, 1.0, "+            ")]
+        fn with_position(x: f32, y: f32, expected_vision: &'static str) {
+            TestCase {
+                foods: vec![food(1.0, 0.4), food(1.0, 0.6)],
+                fov_range: 1.0,
+                fov_angle: FRAC_PI_2,
+                rot: 0.0,
+                x,
+                y,
+                expected_vision,
+            }
+            .run()
+        }
+    }
 }
