@@ -265,6 +265,13 @@ mod tests {
         vision.join("")
     }
 
+    /// A helper-function that allows to create food easily
+    fn food(x: f32, y: f32) -> Food {
+        Food {
+            position: na::Point2::new(x, y),
+        }
+    }
+
     mod different_fov_ranges {
         use test_case::test_case;
 
