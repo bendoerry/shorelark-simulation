@@ -1,4 +1,7 @@
+use nalgebra as na;
 use std::f32::consts::{FRAC_PI_4, PI};
+
+use crate::Food;
 
 /// How far our eye can see:
 ///
@@ -94,10 +97,44 @@ const FOV_ANGLE: f32 = PI + FRAC_PI_4;
 const CELLS: usize = 9;
 
 #[derive(Debug)]
-pub struct Eye;
+pub struct Eye {
+    fov_range: f32,
+    fov_angle: f32,
+    cells: usize,
+}
 
 impl Eye {
-    pub fn process_vision() -> Vec<f32> {
+    // FOV_RANGE, FOV_ANGLE & CELLS are the values we'll use during
+    // simulation - but being able to create an arbitrary eye will
+    // come handy during the testing:
+    fn new(fov_range: f32, fov_angle: f32, cells: usize) -> Self {
+        assert!(fov_range > 0.0);
+        assert!(fov_angle > 0.0);
+        assert!(cells > 0);
+
+        Self {
+            fov_range,
+            fov_angle,
+            cells,
+        }
+    }
+
+    pub fn cells(&self) -> usize {
+        self.cells
+    }
+
+    pub fn process_vision(
+        &self,
+        position: na::Point2<f32>,
+        rotation: na::Rotation2<f32>,
+        foods: &[Food],
+    ) -> Vec<f32> {
         todo!();
+    }
+}
+
+impl Default for Eye {
+    fn default() -> Self {
+        Self::new(FOV_RANGE, FOV_ANGLE, CELLS)
     }
 }
