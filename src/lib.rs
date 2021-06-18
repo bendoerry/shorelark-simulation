@@ -28,6 +28,10 @@ impl Simulation {
     /// Performs a single step - a single second, so to say - of our
     /// simulation.
     pub fn step(&mut self) {
+        self.process_movements();
+    }
+
+    fn process_movements(&mut self) {
         for animal in &mut self.world.animals {
             animal.position += animal.rotation * na::Vector2::new(animal.speed, 0.0);
 
