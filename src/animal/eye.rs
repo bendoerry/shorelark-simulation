@@ -138,6 +138,22 @@ impl Eye {
             if dist >= self.fov_range {
                 continue;
             }
+
+            // Returns vector's direction relative to the X axis
+            let angle = na::Rotation2::rotation_between(&na::Vector2::x(), &vec).angle();
+
+            // Because our bird is *also* rotated, we have to include its
+            // rotation too:
+            let angle = angle - rotation.angle();
+
+            // Rotation is wrapping (from -PI to PI)
+            let angle = na::wrap(angle, -PI, PI);
+
+            // If current angle is outside our birdie's field of view, jump
+            // to the next food
+            if angle < -self.fov_angle / 2.0 || angle > self.fov_angle / 2.0 {
+                continue;
+            }
         }
 
         cells
