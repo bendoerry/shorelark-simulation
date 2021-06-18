@@ -1,5 +1,6 @@
 #![feature(crate_visibility_modifier)]
 
+use lib_genetic_algorithm as ga;
 use nalgebra as na;
 use rand::Rng;
 use std::f32::consts::FRAC_PI_2;
@@ -48,15 +49,43 @@ const SPEED_ACCEL: f32 = 0.2;
 /// to play nice.
 const ROTATION_ACCEL: f32 = FRAC_PI_2;
 
+/// How much `.step()`-s have to occur before we push data into the
+/// genetic algorithm.
+///
+/// Value that's too low might prevent the birds from learning, while
+/// a value that's too high will make the evolution unnecessarily
+/// slower.
+///
+/// You can treat this number as "for how many steps each bird gets
+/// to live"; 2500 was chosen with a fair dice roll.
+const GENERATION_LENGTH: usize = 2500;
+
 pub struct Simulation {
     world: World,
+    ga: ga::GeneticAlgorithm<ga::RouletteWheelSelection>,
+    age: usize,
 }
 
 impl Simulation {
     pub fn random(rng: &mut dyn rand::RngCore) -> Self {
-        Self {
-            world: World::random(rng),
-        }
+        let world = World::random(rng);
+
+        let ga = ga::GeneticAlgorithm::new(
+            ga::RouletteWheelSelection::default(),
+            ga::UniformCrossover::default(),
+            ga::GaussianMutation::new(0.01, 0.3),
+            // ---------------------- ^--^ -^-^
+            // | Chosen with a bit of experimentation.
+            // |
+            // | Higher values can make the simulation more chaotic,
+            // | which - a bit counterintuitively - might allow for
+            // | it to discover *better* solutions; but the trade-off
+            // | is that higher values might also cause current, good
+            // | enough solutions to be discarded.
+            // ---
+        );
+
+        Self { world, ga, age: 0 }
     }
 
     pub fn world(&self) -> &World {
