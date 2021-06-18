@@ -132,8 +132,11 @@ impl Eye {
         let mut cells = vec![0.0; self.cells];
 
         for food in foods {
-            if food inside fov {
-                cells[cell that sees this food] += how close the food is;
+            let vec = food.position - position;
+            let dist = vec.norm();
+
+            if dist >= self.fov_range {
+                continue;
             }
         }
 
