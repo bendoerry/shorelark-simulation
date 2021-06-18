@@ -1,6 +1,7 @@
 #![feature(crate_visibility_modifier)]
 
 use nalgebra as na;
+use rand::Rng;
 
 pub use crate::animal::Animal;
 pub use crate::food::Food;
@@ -27,13 +28,21 @@ impl Simulation {
 
     /// Performs a single step - a single second, so to say - of our
     /// simulation.
-    pub fn step(&mut self) {
-        self.process_collisions();
+    pub fn step(&mut self, rng: &mut dyn rand::RngCore) {
+        self.process_collisions(rng);
         self.process_movements();
     }
 
-    fn process_collisions(&mut self) {
-        todo!();
+    fn process_collisions(&mut self, rng: &mut dyn rand::RngCore) {
+        for animal in &mut self.world.animals {
+            for food in &mut self.world.foods {
+                let distance = na::distance(&animal.position, &food.position);
+
+                if distance <= 0.01 {
+                    food.position = rng.gen()
+                }
+            }
+        }
     }
 
     fn process_movements(&mut self) {
