@@ -169,19 +169,23 @@ impl Simulation {
     fn evolve(&mut self, rng: &mut dyn rand::RngCore) {
         self.age = 0;
 
-        // Step 1: Prepare birdies to be sent into the genetic algorithm
-        let current_population = todo!();
+        // Transforms `Vec<Animal>` to `Vec<AnimalIndividual>`
+        let current_population: Vec<_> = self
+            .world
+            .animals
+            .iter()
+            .map(|animal| todo!("Convert `Animal` to `AnimalIndividual`"))
+            .collect();
 
-        // Step 2: Evolve birdies
+        // Evolves this `Vec<AnimalIndividual>`
         let evolved_population = self.ga.evolve(rng, &current_population);
 
-        // Step 3: Bring birdies back from the genetic algorithm
-        self.world.animals = todo!();
+        // Transforms `Vec<AnimalIndividual>` back into `Vec<Animal>`
+        self.world.animals = evolved_population
+            .into_iter()
+            .map(|individual| todo!("Convert `AnimalIndividual` to `Animal`"))
+            .collect();
 
-        // Step 4: Restart foods
-        //
-        // (this is not strictly necessary, but it allows to easily spot
-        // when the evolution happens - so it's more of a UI thing.)
         for food in &mut self.world.foods {
             food.position = rng.gen();
         }
