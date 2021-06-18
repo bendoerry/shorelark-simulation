@@ -28,7 +28,12 @@ impl Simulation {
     /// Performs a single step - a single second, so to say - of our
     /// simulation.
     pub fn step(&mut self) {
+        self.process_collisions();
         self.process_movements();
+    }
+
+    fn process_collisions(&mut self) {
+        todo!();
     }
 
     fn process_movements(&mut self) {
