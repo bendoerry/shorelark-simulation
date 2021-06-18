@@ -9,7 +9,10 @@ pub struct AnimalIndividual {
 
 impl AnimalIndividual {
     pub fn from_animal(animal: &Animal) -> Self {
-        todo!()
+        Self {
+            fitness: todo!(),
+            chromosome: todo!(),
+        }
     }
 
     pub fn into_animal(self, rng: &mut dyn rand::RngCore) -> Animal {
