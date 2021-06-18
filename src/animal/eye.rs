@@ -200,18 +200,18 @@ mod tests {
 
         use super::TestCase;
 
-        #[test_case(1.0)]
-        #[test_case(0.5)]
-        #[test_case(0.1)]
-        fn test(fov_range: f32) {
+        #[test_case(1.0, "not sure yet")]
+        #[test_case(0.5, "not sure yet")]
+        #[test_case(0.1, "not sure yet")]
+        fn test(fov_range: f32, expected_vision: &'static str) {
             TestCase {
                 foods: todo!(),
                 fov_angle: todo!(),
                 x: todo!(),
                 y: todo!(),
                 rot: todo!(),
-                expected_vision: todo!(),
                 fov_range,
+                expected_vision,
             }
             .run()
         }
