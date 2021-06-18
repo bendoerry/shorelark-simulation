@@ -5,6 +5,7 @@ use rand::Rng;
 use self::eye::Eye;
 
 mod eye;
+mod individual;
 
 #[derive(Debug)]
 pub struct Animal {
