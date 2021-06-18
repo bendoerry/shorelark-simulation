@@ -218,7 +218,51 @@ mod tests {
                 na::Rotation2::new(self.rot),
                 &self.foods,
             );
+
+            // The finish line!
+            assert_eq!(convert_vision(actual_vision), self.expected_vision);
         }
+    }
+
+    fn convert_vision(vision: Vec<f32>) -> String {
+        let vision: Vec<_> = vision
+            .into_iter()
+            .map(|cell| {
+                // As a reminder, the higher cell's value, the closer
+                // the food is:
+
+                if cell >= 0.7 {
+                    // <0.7, 1.0>
+                    // food is right in front of us
+                    "#"
+                } else if cell >= 0.3 {
+                    // <0.3, 0.7)
+                    // food is somewhat further
+                    "+"
+                } else if cell > 0.0 {
+                    // <0.0, 0.3)
+                    // food is pretty far away
+                    "."
+                } else {
+                    // 0.0
+                    // no food in sight, this cell sees empty space
+                    " "
+                }
+            })
+            .collect();
+
+        // As before, there's nothing special about the cell values
+        // (`0.7`, `0.3`, `0.0`) or the characters (`#`, `+`, `.`).
+        //
+        // I've chosen hash because to my eye it seems to occupy the
+        // most "visual space" out of all the ASCII characters (thus
+        // it represents a food being close), and then plus and dot
+        // are just smaller (representing food being further away).
+
+        // `.join()` converts `Vec<String>` into `String` using a
+        // separator - e.g. `vec!["a", "b", "c"].join("|")` would
+        // return `a|b|c`.
+        vision.join("")
     }
 
     mod different_fov_ranges {
