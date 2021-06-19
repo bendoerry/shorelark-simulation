@@ -40,6 +40,19 @@ impl Animal {
         Self::new(eye, brain, rng)
     }
 
+    /// "Restores" bird from a chromosome.
+    ///
+    /// We have to have access to the PRNG in here, because our
+    /// chromosomes encode only the brains - and while we restore the
+    /// bird, we have to also randomize its position, direction, etc.
+    /// (so it's stuff that wouldn't make sense to keep in the genome.)
+    crate fn from_chromosome(chromosome: ga::Chromosome, rng: &mut dyn rand::RngCore) -> Self {
+        let eye = Eye::default();
+        let brain = Brain::from_chromosome(chromosome, &eye);
+
+        Self::new(eye, brain, rng)
+    }
+
     crate fn as_chromosome(&self) -> ga::Chromosome {
         // We evolve only our birds' brains, but technically there's no
         // reason not to simulate e.g. physical properties such as size.
