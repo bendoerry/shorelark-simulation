@@ -128,7 +128,7 @@ impl Simulation {
                     .eye
                     .process_vision(animal.position, animal.rotation, &self.world.foods);
 
-            let response = animal.brain.propagate(vision);
+            let response = animal.brain.nn.propagate(vision);
 
             // ---
             // | Limits number to given range.
