@@ -40,6 +40,17 @@ impl Animal {
         Self::new(eye, brain, rng)
     }
 
+    crate fn as_chromosome(&self) -> ga::Chromosome {
+        // We evolve only our birds' brains, but technically there's no
+        // reason not to simulate e.g. physical properties such as size.
+        //
+        // If that was to happen, this function could be adjusted to
+        // return a longer chromosome that encodes not only the brain,
+        // but also, say, birdie's color.
+
+        self.brain.as_chromosome()
+    }
+
     pub fn position(&self) -> na::Point2<f32> {
         // ------------------ ^
         // | No need to return a reference, because na::Point2 is Copy.
