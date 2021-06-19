@@ -6,6 +6,7 @@ use self::eye::Eye;
 
 pub use self::individual::AnimalIndividual;
 
+mod brain;
 mod eye;
 mod individual;
 
