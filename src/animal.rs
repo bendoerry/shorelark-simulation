@@ -1,11 +1,12 @@
-use lib_neural_network as nn;
+use lib_genetic_algorithm as ga;
 use nalgebra as na;
 use rand::Rng;
 
-use self::eye::Eye;
+use self::{brain::Brain, eye::Eye};
 
 pub use self::individual::AnimalIndividual;
 
+mod brain;
 mod eye;
 mod individual;
 
@@ -15,28 +16,13 @@ pub struct Animal {
     crate rotation: na::Rotation2<f32>,
     crate speed: f32,
     crate eye: Eye,
-    crate brain: nn::Network,
+    crate brain: Brain,
     /// Number of foods eaten by this animal
     crate satiation: usize,
 }
 
 impl Animal {
-    pub fn random(rng: &mut dyn rand::RngCore) -> Self {
-        let eye = Eye::default();
-
-        let brain = nn::Network::random(
-            rng,
-            &[
-                nn::LayerTopology {
-                    neurons: eye.cells(),
-                },
-                nn::LayerTopology {
-                    neurons: 2 * eye.cells(),
-                },
-                nn::LayerTopology { neurons: 2 },
-            ],
-        );
-
+    fn new(eye: Eye, brain: Brain, rng: &mut dyn rand::RngCore) -> Self {
         Self {
             position: rng.gen(),
             rotation: rng.gen(),
@@ -45,6 +31,13 @@ impl Animal {
             brain,
             satiation: 0,
         }
+    }
+
+    pub fn random(rng: &mut dyn rand::RngCore) -> Self {
+        let eye = Eye::default();
+        let brain = Brain::random(rng, &eye);
+
+        Self::new(eye, brain, rng)
     }
 
     pub fn position(&self) -> na::Point2<f32> {
