@@ -96,7 +96,7 @@ impl Simulation {
 
     /// Performs a single step - a single second, so to say - of our
     /// simulation.
-    pub fn step(&mut self, rng: &mut dyn rand::RngCore) -> bool {
+    pub fn step(&mut self, rng: &mut dyn rand::RngCore) -> Option<ga::Statistics> {
         self.process_collisions(rng);
         self.process_brains();
         self.process_movements();
@@ -104,18 +104,17 @@ impl Simulation {
         self.age += 1;
 
         if self.age > GENERATION_LENGTH {
-            self.evolve(rng);
-            true
+            Some(self.evolve(rng))
         } else {
-            false
+            None
         }
     }
 
     /// Fast-forward 'till the end of the current generation
-    pub fn train(&mut self, rng: &mut dyn rand::RngCore) {
+    pub fn train(&mut self, rng: &mut dyn rand::RngCore) -> ga::Statistics {
         loop {
-            if self.step(rng) {
-                return;
+            if let Some(summary) = self.step(rng) {
+                return summary;
             }
         }
     }
@@ -181,7 +180,7 @@ impl Simulation {
         }
     }
 
-    fn evolve(&mut self, rng: &mut dyn rand::RngCore) {
+    fn evolve(&mut self, rng: &mut dyn rand::RngCore) -> ga::Statistics {
         self.age = 0;
 
         // Transforms `Vec<Animal>` to `Vec<AnimalIndividual>`
@@ -193,7 +192,7 @@ impl Simulation {
             .collect();
 
         // Evolves this `Vec<AnimalIndividual>`
-        let evolved_population = self.ga.evolve(rng, &current_population);
+        let (evolved_population, stats) = self.ga.evolve(rng, &current_population);
 
         // Transforms `Vec<AnimalIndividual>` back into `Vec<Animal>`
         self.world.animals = evolved_population
@@ -204,5 +203,7 @@ impl Simulation {
         for food in &mut self.world.foods {
             food.position = rng.gen();
         }
+
+        stats
     }
 }
