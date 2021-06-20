@@ -96,7 +96,7 @@ impl Simulation {
 
     /// Performs a single step - a single second, so to say - of our
     /// simulation.
-    pub fn step(&mut self, rng: &mut dyn rand::RngCore) {
+    pub fn step(&mut self, rng: &mut dyn rand::RngCore) -> bool {
         self.process_collisions(rng);
         self.process_brains();
         self.process_movements();
@@ -105,6 +105,18 @@ impl Simulation {
 
         if self.age > GENERATION_LENGTH {
             self.evolve(rng);
+            true
+        } else {
+            false
+        }
+    }
+
+    /// Fast-forward 'till the end of the current generation
+    pub fn train(&mut self, rng: &mut dyn rand::RngCore) {
+        loop {
+            if self.step(rng) {
+                return;
+            }
         }
     }
 
