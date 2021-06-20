@@ -181,7 +181,7 @@ impl Simulation {
         }
     }
 
-    fn evolve(&mut self, rng: &mut dyn rand::RngCore) {
+    fn evolve(&mut self, rng: &mut dyn rand::RngCore) -> ga::Statistics {
         self.age = 0;
 
         // Transforms `Vec<Animal>` to `Vec<AnimalIndividual>`
@@ -193,7 +193,7 @@ impl Simulation {
             .collect();
 
         // Evolves this `Vec<AnimalIndividual>`
-        let evolved_population = self.ga.evolve(rng, &current_population);
+        let (evolved_population, stats) = self.ga.evolve(rng, &current_population);
 
         // Transforms `Vec<AnimalIndividual>` back into `Vec<Animal>`
         self.world.animals = evolved_population
@@ -204,5 +204,7 @@ impl Simulation {
         for food in &mut self.world.foods {
             food.position = rng.gen();
         }
+
+        stats
     }
 }
