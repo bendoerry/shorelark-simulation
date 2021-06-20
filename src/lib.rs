@@ -111,6 +111,15 @@ impl Simulation {
         }
     }
 
+    /// Fast-forward 'till the end of the current generation
+    pub fn train(&mut self, rng: &mut dyn rand::RngCore) {
+        loop {
+            if self.step(rng) {
+                return;
+            }
+        }
+    }
+
     fn process_collisions(&mut self, rng: &mut dyn rand::RngCore) {
         for animal in &mut self.world.animals {
             for food in &mut self.world.foods {
